@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>La Cantina PE — Not Just Dinner. A Night Out.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Nunito:ital,wght@0,300;0,400;0,600;0,800;1,300;1,400&family=Permanent+Marker&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════ */
+:root {
+  --night:      #0a0609;
+  --deep:       #110a0e;
+  --shadow:     #1a0f14;
+  --bark:       #251519;
+  --chili:      #c42b1a;
+  --chili-hot:  #e63520;
+  --chili-glow: #ff4a2f;
+  --tequila:    #d4891a;
+  --tequila-pale:#f0b44a;
+  --lime:       #3db54a;
+  --lime-bright:#52d461;
+  --pink:       #e8287a;
+  --pink-glow:  #ff3d8e;
+  --cyan:       #0dccc8;
+  --cream:      #fdf4e3;
+  --parchment:  #f9eecc;
+  --chalk:      #edddc0;
+  --smoke:      rgba(253,244,227,0.6);
+  --smoke-dim:  rgba(253,244,227,0.3);
+  --smoke-faint:rgba(253,244,227,0.1);
+  --r: 4px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--night);
+  color:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* GRAIN OVERLAY */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:180px;
+  pointer-events:none;z-index:9990;
+  mix-blend-mode:overlay;opacity:0.65;
+}
+
+/* ═══════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════ */
+#cur{
+  width:8px;height:8px;
+  background:var(--chili-glow);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:10000;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:screen;
+}
+#cur-ring{
+  width:36px;height:36px;
+  border:1.5px solid rgba(196,43,26,0.5);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .3s,height .3s,border-color .3s;
+}
+body.hov #cur-ring{width:52px;height:52px;border-color:var(--chili-glow);}
+
+/* PARTICLE CANVAS */
+#fiesta-canvas{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.7;
+}
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+#nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:500;
+  padding:22px 56px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .4s;
+}
+#nav.scrolled{
+  background:rgba(10,6,9,0.95);
+  backdrop-filter:blur(24px);
+  padding:14px 56px;
+  border-bottom:1px solid rgba(196,43,26,0.2);
+}
+.nav-logo{text-decoration:none;display:flex;flex-direction:column;gap:0;}
+.nl-main{
+  font-family:'Bebas Neue',cursive;
+  font-size:2rem;
+  letter-spacing:0.08em;
+  color:var(--cream);
+  line-height:1;
+}
+.nl-main .ac{color:var(--chili-glow);}
+.nl-sub{
+  font-size:0.6rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--tequila);
+  margin-top:1px;
+}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center;}
+.nav-links a{
+  font-size:0.7rem;font-weight:600;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--smoke);text-decoration:none;
+  transition:color .25s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1.5px;background:var(--chili-glow);
+  transition:width .3s;
+}
+.nav-links a:hover{color:var(--cream);}
+.nav-links a:hover::after{width:100%;}
+.nav-book{
+  font-size:0.68rem;font-weight:800;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--night);
+  background:linear-gradient(135deg,var(--chili),var(--chili-hot));
+  padding:12px 28px;text-decoration:none;
+  border:none;cursor:pointer;
+  transition:all .3s;display:inline-flex;align-items:center;gap:8px;
+  position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+}
+.nav-book::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--pink),var(--chili-hot));transform:translateX(-100%);transition:transform .4s;}
+.nav-book:hover::before{transform:translateX(0);}
+.nav-book span{position:relative;z-index:1;}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.ham span{display:block;width:24px;height:1.5px;background:var(--cream);transition:all .3s;}
+
+/* MOBILE NAV */
+#mob-nav{
+  position:fixed;inset:0;background:rgba(10,6,9,0.98);
+  z-index:490;transform:translateX(100%);
+  transition:transform .45s cubic-bezier(.77,0,.175,1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
+}
+#mob-nav.open{transform:translateX(0);}
+#mob-nav a{
+  font-family:'Bebas Neue',cursive;
+  font-size:3rem;letter-spacing:0.1em;
+  color:var(--cream);text-decoration:none;
+  transition:color .25s;
+}
+#mob-nav a:hover{color:var(--chili-glow);}
+.mob-close{
+  position:absolute;top:24px;right:28px;
+  font-size:2rem;color:var(--smoke-dim);
+  background:none;border:none;cursor:pointer;
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero{
+  position:relative;z-index:2;
+  min-height:100vh;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 50%,rgba(196,43,26,0.12) 0%,transparent 65%),
+    radial-gradient(ellipse 60% 50% at 90% 20%,rgba(232,40,122,0.06) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 60% at 5% 80%,rgba(61,181,74,0.04) 0%,transparent 50%),
+    linear-gradient(180deg,#0a0609 0%,#110a0e 60%,#0a0609 100%);
+}
+
+/* PAPEL PICADO BANNER */
+.picado-banner{
+  position:absolute;top:0;left:0;right:0;
+  height:80px;z-index:5;
+  overflow:hidden;
+}
+.picado-banner svg{width:100%;height:80px;}
+
+.hero-orb{
+  position:absolute;right:-60px;top:50%;
+  transform:translateY(-50%);
+  width:clamp(340px,45vw,620px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 40% 35%,#2a1018 0%,#160910 55%,#0a0609 100%);
+  border:1px solid rgba(196,43,26,0.14);
+  box-shadow:0 0 120px rgba(196,43,26,0.1),0 0 40px rgba(232,40,122,0.05),inset 0 0 80px rgba(0,0,0,0.6);
+  display:flex;align-items:center;justify-content:center;
+  animation:orbPulse 8s ease-in-out infinite;
+}
+.hero-orb::before{
+  content:'';position:absolute;inset:24px;border-radius:50%;
+  border:1px dashed rgba(196,43,26,0.1);
+  animation:orbSpin 30s linear infinite;
+}
+.hero-orb::after{
+  content:'';position:absolute;inset:60px;border-radius:50%;
+  border:1px solid rgba(212,137,26,0.08);
+  animation:orbSpin 20s linear infinite reverse;
+}
+.orb-inner{
+  width:52%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(ellipse at 40% 35%,#3a1820 0%,#200d12 70%);
+  border:1px solid rgba(212,137,26,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(4rem,7vw,9rem);
+  filter:drop-shadow(0 0 40px rgba(196,43,26,0.3));
+}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 120px rgba(196,43,26,0.1),0 0 40px rgba(232,40,122,0.05),inset 0 0 80px rgba(0,0,0,0.6);}50%{box-shadow:0 0 160px rgba(196,43,26,0.18),0 0 60px rgba(232,40,122,0.08),inset 0 0 80px rgba(0,0,0,0.6);}}
+@keyframes orbSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.hero-content{
+  position:relative;z-index:3;
+  padding:130px 60px 80px;
+  max-width:820px;
+}
+.hero-eyebrow{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;
+  animation:riseUp 1s .1s both;
+}
+.eyebrow-dot{width:8px;height:8px;background:var(--chili-glow);border-radius:50%;animation:dotPulse 2s ease-in-out infinite;}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
+.eyebrow-text{
+  font-size:0.65rem;font-weight:800;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--tequila);
+}
+.eyebrow-line{flex:1;max-width:80px;height:1px;background:linear-gradient(to right,var(--chili),transparent);}
+
+.hero-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(4.5rem,10vw,10rem);
+  line-height:0.88;
+  letter-spacing:0.03em;
+  color:var(--cream);
+  margin-bottom:8px;
+  animation:riseUp 1s .2s both;
+}
+.hero-title .line-red{color:var(--chili-glow);display:block;}
+.hero-title .line-script{
+  font-family:'Pacifico',cursive;
+  font-size:0.45em;
+  color:var(--tequila-pale);
+  display:block;
+  line-height:1.3;
+  letter-spacing:0.02em;
+}
+
+.hero-sub{
+  font-size:1rem;font-weight:300;
+  line-height:1.85;
+  color:var(--smoke);
+  max-width:520px;
+  margin:24px 0 40px;
+  letter-spacing:0.03em;
+  animation:riseUp 1s .32s both;
+}
+.hero-sub strong{color:var(--cream);font-weight:700;}
+
+.hero-btns{
+  display:flex;gap:14px;flex-wrap:wrap;
+  animation:riseUp 1s .44s both;
+}
+.btn-fiesta{
+  font-size:0.7rem;font-weight:800;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--night);
+  background:linear-gradient(135deg,var(--chili),var(--chili-hot));
+  padding:16px 38px;text-decoration:none;
+  border:none;cursor:pointer;
+  transition:all .3s;
+  display:inline-flex;align-items:center;gap:10px;
+  position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+}
+.btn-fiesta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--pink),var(--chili-hot));transform:translateX(-100%);transition:transform .4s;}
+.btn-fiesta:hover::before{transform:translateX(0);}
+.btn-fiesta span{position:relative;z-index:1;}
+.btn-ghost{
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--cream);
+  background:transparent;
+  padding:16px 38px;text-decoration:none;
+  border:1px solid rgba(253,244,227,0.2);
+  cursor:pointer;transition:all .3s;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.btn-ghost:hover{border-color:var(--chili-glow);color:var(--chili-glow);}
+
+.hero-live-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:36px;
+  padding:10px 20px;
+  background:rgba(196,43,26,0.12);
+  border:1px solid rgba(196,43,26,0.3);
+  animation:riseUp 1s .56s both;
+}
+.live-dot{width:7px;height:7px;background:var(--lime-bright);border-radius:50%;animation:livePulse 1.5s ease-in-out infinite;}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(82,212,97,0.6);}50%{box-shadow:0 0 0 6px rgba(82,212,97,0);}}
+.live-text{font-size:0.68rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--lime-bright);}
+.live-event{font-size:0.75rem;color:var(--smoke);margin-left:6px;}
+
+.hero-badges{
+  display:flex;gap:24px;margin-top:44px;flex-wrap:wrap;
+  animation:riseUp 1s .68s both;
+}
+.hbadge{display:flex;align-items:center;gap:10px;font-size:0.68rem;color:var(--smoke-dim);letter-spacing:0.06em;}
+.hbadge-icon{font-size:1.1rem;}
+.hbadge-div{width:1px;height:20px;background:rgba(196,43,26,0.2);}
+
+.hero-scroll{
+  position:absolute;bottom:36px;left:60px;z-index:3;
+  display:flex;align-items:center;gap:14px;
+  animation:riseUp 1s 1s both;
+}
+.scroll-wheel{width:22px;height:36px;border:1px solid rgba(253,244,227,0.18);border-radius:11px;display:flex;justify-content:center;padding-top:5px;}
+.scroll-wheel::before{content:'';width:2.5px;height:7px;background:var(--chili-glow);border-radius:2px;animation:scrollDot 2s ease-in-out infinite;}
+@keyframes scrollDot{0%,100%{transform:translateY(0);opacity:1}80%{transform:translateY(11px);opacity:0}}
+.scroll-text{font-size:0.58rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--smoke-dim);}
+
+@keyframes riseUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════
+   INFO STRIP
+═══════════════════════════════════════ */
+.info-strip{
+  position:relative;z-index:2;
+  background:var(--shadow);
+  border-top:1px solid rgba(196,43,26,0.18);
+  border-bottom:1px solid rgba(196,43,26,0.18);
+}
+.info-strip-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:stretch;
+}
+.is-cell{
+  flex:1;padding:24px 32px;
+  border-right:1px solid rgba(196,43,26,0.12);
+  display:flex;align-items:center;gap:14px;
+  transition:background .3s;
+  text-decoration:none;
+}
+.is-cell:last-child{border-right:none;}
+.is-cell:hover{background:rgba(196,43,26,0.06);}
+.is-icon{font-size:1.4rem;}
+.is-label{font-size:0.55rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--chili-glow);margin-bottom:4px;}
+.is-val{font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:0.06em;color:var(--cream);}
+.is-sub{font-size:0.68rem;color:var(--smoke-dim);margin-top:2px;}
+
+/* ═══════════════════════════════════════
+   SECTION BASE
+═══════════════════════════════════════ */
+.sw{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:110px 60px;}
+.stag{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.stag-line{width:40px;height:1.5px;background:var(--chili-glow);}
+.stag-text{font-size:0.62rem;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--chili-glow);}
+.section-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(3rem,6vw,5.5rem);
+  line-height:0.9;
+  letter-spacing:0.04em;
+  color:var(--cream);
+  margin-bottom:20px;
+}
+.section-title .acc{color:var(--tequila-pale);}
+.section-title .pink{color:var(--pink-glow);}
+.section-sub{
+  font-size:1rem;font-weight:300;
+  line-height:1.8;color:var(--smoke);
+  max-width:560px;letter-spacing:0.02em;
+}
+
+/* ═══════════════════════════════════════
+   REVEAL
+═══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .8s,transform .8s;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .8s,transform .8s;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* ═══════════════════════════════════════
+   THE EXPERIENCE SECTION
+═══════════════════════════════════════ */
+#experience{background:linear-gradient(180deg,var(--night) 0%,var(--deep) 50%,var(--night) 100%);}
+
+.xp-intro-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  margin-bottom:90px;
+}
+.xp-text .big-quote{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  color:var(--tequila-pale);
+  line-height:1.4;
+  margin-bottom:28px;
+}
+.xp-text p{font-size:0.95rem;line-height:1.9;color:var(--smoke);margin-bottom:16px;}
+.xp-text strong{color:var(--cream);}
+
+.xp-visual{
+  position:relative;
+  height:480px;
+}
+.xp-frame{
+  position:absolute;
+  border:1px solid rgba(196,43,26,0.2);
+  background:var(--bark);
+  overflow:hidden;
+}
+.xp-frame-1{
+  top:0;left:0;right:60px;height:56%;
+  background:linear-gradient(135deg,#251519 0%,#1a0f14 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.xp-frame-2{
+  bottom:0;right:0;left:80px;height:50%;
+  background:linear-gradient(135deg,#1a0f14 0%,#251519 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.xp-frame-emoji{font-size:5rem;filter:drop-shadow(0 0 30px rgba(196,43,26,0.4));}
+.xp-frame::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(196,43,26,0.06) 0%,transparent 70%);
+}
+.xp-corner{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:80px;height:80px;
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.3);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  z-index:10;
+  box-shadow:0 0 40px rgba(196,43,26,0.2);
+}
+
+/* VIBE CARDS */
+.vibe-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:2px;
+}
+.vibe-card{
+  background:var(--shadow);
+  border:1px solid rgba(196,43,26,0.1);
+  padding:36px 28px;
+  transition:all .35s;
+  position:relative;overflow:hidden;
+  cursor:default;
+}
+.vibe-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(196,43,26,0.05),transparent);
+  opacity:0;transition:opacity .35s;
+}
+.vibe-card:hover{border-color:rgba(196,43,26,0.35);transform:translateY(-4px);}
+.vibe-card:hover::before{opacity:1;}
+.vc-icon{font-size:2.6rem;margin-bottom:18px;display:block;}
+.vc-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.4rem;letter-spacing:0.06em;
+  color:var(--cream);margin-bottom:10px;
+}
+.vc-text{font-size:0.82rem;line-height:1.7;color:var(--smoke-dim);}
+.vc-tag{
+  display:inline-block;margin-top:14px;
+  font-size:0.58rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--tequila);
+}
+
+/* ═══════════════════════════════════════
+   EVENTS THIS WEEK
+═══════════════════════════════════════ */
+#events{
+  background:var(--shadow);
+  border-top:1px solid rgba(196,43,26,0.15);
+  border-bottom:1px solid rgba(196,43,26,0.15);
+}
+
+.events-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  margin-top:60px;
+}
+.event-card{
+  position:relative;
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.12);
+  padding:40px 34px;
+  overflow:hidden;
+  transition:all .35s;
+}
+.event-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--chili),var(--pink));
+}
+.event-card.featured{
+  border-color:rgba(196,43,26,0.35);
+  background:linear-gradient(160deg,#1a0f14 0%,#0f070c 100%);
+}
+.event-card.featured::before{
+  background:linear-gradient(90deg,var(--tequila),var(--chili-glow),var(--pink));
+}
+.event-card:hover{transform:translateY(-5px);border-color:rgba(196,43,26,0.4);}
+.ec-day{
+  font-family:'Bebas Neue',cursive;
+  font-size:0.85rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:var(--chili-glow);margin-bottom:10px;
+}
+.ec-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:2.2rem;letter-spacing:0.04em;
+  color:var(--cream);line-height:1;margin-bottom:14px;
+}
+.ec-emoji{font-size:2.5rem;display:block;margin-bottom:14px;}
+.ec-desc{font-size:0.82rem;line-height:1.7;color:var(--smoke-dim);margin-bottom:20px;}
+.ec-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.ec-tag{
+  font-size:0.58rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;
+  padding:5px 12px;border:1px solid rgba(196,43,26,0.3);color:var(--chili-glow);
+}
+.ec-featured-badge{
+  position:absolute;top:20px;right:20px;
+  font-size:0.55rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--night);background:var(--tequila);
+  padding:5px 12px;
+}
+
+.event-cta{
+  text-align:center;margin-top:50px;
+}
+.event-cta p{font-size:0.85rem;color:var(--smoke-dim);margin-bottom:20px;letter-spacing:0.05em;}
+
+/* ═══════════════════════════════════════
+   MENU SECTION
+═══════════════════════════════════════ */
+#menu{background:var(--night);}
+.menu-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-bottom:50px;}
+
+.menu-tabs{display:flex;gap:2px;flex-wrap:wrap;}
+.mtab{
+  font-size:0.65rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+  padding:12px 24px;background:var(--shadow);
+  border:1px solid rgba(196,43,26,0.12);
+  color:var(--smoke-dim);cursor:pointer;transition:all .3s;
+  border-bottom:none;
+}
+.mtab.active{background:var(--deep);color:var(--cream);border-color:rgba(196,43,26,0.3);}
+.mtab:hover:not(.active){color:var(--smoke);background:rgba(196,43,26,0.06);}
+
+.menu-body{
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.15);
+  min-height:500px;
+}
+.menu-panel{display:none;padding:50px;}
+.menu-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+
+.dish-card{
+  background:var(--shadow);
+  border:1px solid rgba(196,43,26,0.1);
+  padding:28px 24px;
+  transition:all .35s;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.dish-card:hover{border-color:rgba(196,43,26,0.4);transform:translateY(-3px);}
+.dish-card:hover .dc-hover{opacity:1;}
+.dc-hover{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(196,43,26,0.06),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.dc-emoji{font-size:2.2rem;margin-bottom:14px;display:block;}
+.dc-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.2rem;letter-spacing:0.06em;
+  color:var(--cream);margin-bottom:8px;
+}
+.dc-variants{font-size:0.75rem;color:var(--smoke-dim);margin-bottom:12px;line-height:1.6;}
+.dc-price-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.dc-price{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.4rem;letter-spacing:0.04em;color:var(--tequila-pale);
+}
+.dc-spicy{font-size:0.85rem;}
+.dc-badge{
+  font-size:0.55rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;
+  padding:4px 10px;background:rgba(61,181,74,0.12);
+  border:1px solid rgba(61,181,74,0.3);color:var(--lime-bright);
+}
+
+/* DRINKS PANEL */
+.menu-panel.drinks-layout{
+  display:none;
+  padding:50px;
+}
+.menu-panel.drinks-layout.active{display:block;}
+.drinks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px;}
+.drink-cat-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.6rem;letter-spacing:0.06em;
+  color:var(--tequila-pale);margin-bottom:20px;
+  padding-bottom:10px;border-bottom:1px solid rgba(212,137,26,0.2);
+}
+.drink-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;border-bottom:1px solid rgba(253,244,227,0.04);
+  font-size:0.85rem;
+}
+.drink-name{color:var(--smoke);}
+.drink-price{color:var(--tequila-pale);font-weight:700;font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:0.04em;}
+
+/* KIDS PANEL */
+.menu-panel.kids-layout{display:none;padding:50px;}
+.menu-panel.kids-layout.active{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+
+/* ═══════════════════════════════════════
+   ATMOSPHERE STRIP (PHOTO GALLERY)
+═══════════════════════════════════════ */
+#atmosphere{
+  background:var(--shadow);
+  border-top:1px solid rgba(196,43,26,0.15);
+  overflow:hidden;
+}
+.atm-header{padding:80px 60px 50px;max-width:1400px;margin:0 auto;}
+.atm-scroll{
+  display:flex;gap:3px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:0 60px 80px;
+  scroll-snap-type:x mandatory;
+}
+.atm-scroll::-webkit-scrollbar{display:none;}
+.atm-frame{
+  flex-shrink:0;
+  width:320px;height:400px;
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:16px;
+  position:relative;overflow:hidden;
+  scroll-snap-align:start;
+  transition:border-color .3s;
+}
+.atm-frame:hover{border-color:rgba(196,43,26,0.4);}
+.atm-frame-emoji{font-size:4.5rem;filter:drop-shadow(0 0 20px rgba(196,43,26,0.3));}
+.atm-frame-label{
+  font-family:'Bebas Neue',cursive;
+  font-size:1rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--smoke-dim);text-align:center;
+}
+.atm-frame::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(196,43,26,0.05) 0%,transparent 65%);
+}
+.atm-img-placeholder{
+  width:100%;height:100%;
+  object-fit:cover;
+  position:absolute;inset:0;
+  opacity:0.7;
+}
+
+/* ═══════════════════════════════════════
+   RESERVATION SECTION
+═══════════════════════════════════════ */
+#reserve{
+  background:linear-gradient(180deg,var(--night) 0%,var(--deep) 50%,var(--night) 100%);
+  position:relative;overflow:hidden;
+}
+#reserve::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:800px;height:800px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(196,43,26,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.reserve-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start;}
+
+.res-info{}
+.res-info .big-number{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(4rem,8vw,7rem);
+  color:var(--chili-glow);letter-spacing:0.04em;
+  line-height:0.9;display:block;
+  margin-bottom:8px;
+}
+.res-info h3{font-size:0.75rem;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--tequila);margin-bottom:24px;}
+.res-info p{font-size:0.9rem;line-height:1.85;color:var(--smoke);margin-bottom:24px;}
+
+.res-details{display:flex;flex-direction:column;gap:16px;margin-top:36px;}
+.rd-row{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid rgba(253,244,227,0.05);}
+.rd-icon{font-size:1.3rem;flex-shrink:0;}
+.rd-label{font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--chili-glow);margin-bottom:4px;}
+.rd-val{font-size:0.88rem;color:var(--cream);}
+
+.res-form{background:var(--shadow);border:1px solid rgba(196,43,26,0.15);padding:46px;}
+.rf-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:2rem;letter-spacing:0.06em;
+  color:var(--cream);margin-bottom:6px;
+}
+.rf-sub{font-size:0.78rem;color:var(--smoke-dim);margin-bottom:32px;letter-spacing:0.04em;}
+
+.ff{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.ff-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.ff label{font-size:0.6rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--smoke-dim);}
+.ff input,.ff select,.ff textarea{
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.15);
+  color:var(--cream);
+  padding:13px 16px;
+  font-family:'Nunito',sans-serif;
+  font-size:0.85rem;
+  outline:none;transition:border-color .3s;
+  width:100%;
+}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:rgba(196,43,26,0.5);}
+.ff select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c42b1a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.ff textarea{height:90px;resize:vertical;}
+
+.occasion-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.occ-chip{
+  font-size:0.65rem;font-weight:700;letter-spacing:0.1em;
+  padding:8px 14px;border:1px solid rgba(253,244,227,0.1);
+  color:var(--smoke-dim);cursor:pointer;transition:all .25s;
+}
+.occ-chip.active,.occ-chip:hover{border-color:rgba(196,43,26,0.5);color:var(--chili-glow);}
+
+.rf-submit{
+  width:100%;padding:18px;margin-top:8px;
+  font-family:'Bebas Neue',cursive;
+  font-size:1.1rem;letter-spacing:0.16em;
+  color:var(--night);
+  background:linear-gradient(135deg,var(--chili),var(--chili-hot));
+  border:none;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.rf-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--pink),var(--chili-hot));transform:translateX(-100%);transition:transform .4s;}
+.rf-submit:hover::before{transform:translateX(0);}
+.rf-submit span{position:relative;z-index:1;}
+.rf-note{font-size:0.65rem;color:var(--smoke-dim);text-align:center;margin-top:14px;letter-spacing:0.06em;}
+
+/* WA CTA */
+.wa-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  background:#25D366;color:#0a0609;
+  font-size:0.72rem;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;
+  padding:14px 28px;text-decoration:none;
+  transition:all .3s;margin-top:24px;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.wa-cta:hover{background:#20c75c;}
+
+/* ═══════════════════════════════════════
+   UBER EATS STRIP
+═══════════════════════════════════════ */
+.uber-strip{
+  background:var(--shadow);
+  border-top:1px solid rgba(196,43,26,0.15);
+  border-bottom:1px solid rgba(196,43,26,0.15);
+  padding:40px 60px;
+}
+.uber-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
+}
+.uber-left h3{
+  font-family:'Bebas Neue',cursive;
+  font-size:1.8rem;letter-spacing:0.06em;color:var(--cream);margin-bottom:6px;
+}
+.uber-left p{font-size:0.82rem;color:var(--smoke-dim);}
+.uber-badge{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--deep);border:1px solid rgba(253,244,227,0.08);
+  padding:14px 24px;font-size:0.8rem;color:var(--smoke);
+}
+.uber-logo{font-family:'Bebas Neue',cursive;font-size:1.4rem;color:var(--lime-bright);letter-spacing:0.08em;}
+
+/* ═══════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════ */
+#reviews{background:var(--night);}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:50px;}
+.rev-card{
+  background:var(--shadow);
+  border:1px solid rgba(196,43,26,0.1);
+  padding:36px 30px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s;
+}
+.rev-card:hover{border-color:rgba(196,43,26,0.35);}
+.rev-stars{font-size:1rem;margin-bottom:14px;letter-spacing:0.12em;color:var(--tequila);}
+.rev-text{
+  font-size:0.9rem;font-style:italic;
+  line-height:1.8;color:var(--smoke);
+  margin-bottom:20px;
+}
+.rev-author{font-size:0.68rem;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--chili-glow);}
+.rev-quote-bg{
+  position:absolute;right:20px;top:10px;
+  font-size:8rem;line-height:1;
+  color:rgba(196,43,26,0.04);
+  font-family:'Pacifico',cursive;
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{
+  background:var(--deep);
+  border-top:1px solid rgba(196,43,26,0.2);
+  position:relative;z-index:2;
+}
+.footer-inner{max-width:1400px;margin:0 auto;padding:70px 60px 36px;}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:50px;margin-bottom:50px;}
+.fb-logo-big{
+  font-family:'Bebas Neue',cursive;
+  font-size:2.2rem;letter-spacing:0.08em;
+  color:var(--cream);text-decoration:none;display:inline-block;margin-bottom:8px;
+}
+.fb-logo-big .ac{color:var(--chili-glow);}
+.fb-tagline{
+  font-family:'Pacifico',cursive;
+  font-size:0.95rem;color:var(--tequila);
+  margin-bottom:16px;display:block;
+}
+.footer-brand p{font-size:0.8rem;line-height:1.8;color:var(--smoke-dim);}
+.f-social{display:flex;gap:10px;margin-top:20px;}
+.fsc{
+  width:36px;height:36px;border:1px solid rgba(253,244,227,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.85rem;color:var(--smoke-dim);text-decoration:none;
+  transition:all .3s;
+}
+.fsc:hover{border-color:var(--chili-glow);color:var(--chili-glow);}
+.fc-title{font-size:0.6rem;font-weight:800;letter-spacing:0.26em;text-transform:uppercase;color:var(--chili-glow);margin-bottom:18px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{font-size:0.82rem;color:var(--smoke-dim);text-decoration:none;transition:color .25s;letter-spacing:0.03em;}
+.footer-links a:hover{color:var(--cream);}
+.footer-bottom{
+  border-top:1px solid rgba(253,244,227,0.04);
+  padding-top:24px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.fbl,.fbr{font-size:0.68rem;color:var(--smoke-dim);letter-spacing:0.06em;}
+.fbr{font-family:'Pacifico',cursive;color:var(--tequila);font-size:0.75rem;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  .xp-intro-grid{grid-template-columns:1fr;gap:40px;}
+  .xp-visual{display:none;}
+  .vibe-grid{grid-template-columns:1fr 1fr;}
+  .events-grid{grid-template-columns:1fr;}
+  .menu-panel.active{grid-template-columns:1fr 1fr;}
+  .reserve-grid{grid-template-columns:1fr;}
+  .rev-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .info-strip-inner{flex-wrap:wrap;}
+  .is-cell{flex:0 0 50%;}
+  .drinks-grid{grid-template-columns:1fr;}
+}
+@media(max-width:700px){
+  #nav{padding:18px 24px;}
+  #nav.scrolled{padding:12px 24px;}
+  .nav-links,.nav-book{display:none;}
+  .ham{display:flex;}
+  .hero-content{padding:100px 24px 60px;}
+  .sw{padding:70px 24px;}
+  .hero-btns{flex-direction:column;}
+  .btn-fiesta,.btn-ghost{text-align:center;justify-content:center;}
+  .vibe-grid{grid-template-columns:1fr;}
+  .menu-panel.active{grid-template-columns:1fr;}
+  .menu-tabs{gap:1px;}
+  .mtab{padding:10px 14px;font-size:0.58rem;}
+  .reserve-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .info-strip-inner{flex-direction:column;}
+  .is-cell{flex:unset;width:100%;border-right:none;border-bottom:1px solid rgba(196,43,26,0.12);}
+  .atm-scroll{padding:0 24px 60px;}
+  .uber-strip{padding:36px 24px;}
+  .hero-orb{display:none;}
+  .footer-inner{padding:50px 24px 28px;}
+  .res-form{padding:28px 20px;}
+  .ff-row{grid-template-columns:1fr;}
+}
+
+/* PICADO SVG TRIANGLES */
+.picado-banner svg .picado-string{stroke:rgba(253,244,227,0.15);stroke-width:1;fill:none;}
+
+/* ═══════════════════════════════════════
+   MARQUEE TICKER
+═══════════════════════════════════════ */
+.ticker-wrap{
+  background:linear-gradient(90deg,var(--chili) 0%,#a01810 50%,var(--chili) 100%);
+  overflow:hidden;padding:14px 0;position:relative;z-index:3;
+  border-top:1px solid rgba(255,74,47,0.4);
+  border-bottom:1px solid rgba(255,74,47,0.4);
+}
+.ticker-inner{
+  display:flex;white-space:nowrap;
+  animation:tickerScroll 28s linear infinite;
+  width:max-content;
+}
+.ticker-inner:hover{animation-play-state:paused;}
+.ticker-item{
+  font-family:'Bebas Neue',cursive;
+  font-size:0.95rem;letter-spacing:0.22em;
+  color:var(--cream);padding:0 40px;
+  display:inline-flex;align-items:center;gap:16px;
+}
+.ticker-dot{color:var(--tequila-pale);font-size:1.1rem;}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════
+   NEON SIGN SECTION
+═══════════════════════════════════════ */
+.neon-section{
+  position:relative;z-index:2;
+  padding:100px 60px;
+  background:var(--deep);
+  text-align:center;
+  overflow:hidden;
+  border-top:1px solid rgba(196,43,26,0.1);
+}
+.neon-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(196,43,26,0.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.neon-big{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(3.5rem,8vw,7rem);
+  color:var(--chili-glow);
+  text-shadow:
+    0 0 20px rgba(255,74,47,0.8),
+    0 0 40px rgba(255,74,47,0.5),
+    0 0 80px rgba(255,74,47,0.3),
+    0 0 120px rgba(255,74,47,0.15);
+  animation:neonFlicker 6s ease-in-out infinite;
+  display:block;margin-bottom:16px;
+  line-height:1.15;
+}
+.neon-sub-text{
+  font-size:clamp(1.5rem,3vw,2.5rem);
+  font-family:'Bebas Neue',cursive;
+  letter-spacing:0.3em;
+  color:var(--tequila-pale);
+  text-shadow:0 0 20px rgba(212,137,26,0.5),0 0 40px rgba(212,137,26,0.25);
+  animation:neonFlicker2 8s ease-in-out infinite;
+  display:block;margin-bottom:40px;
+}
+@keyframes neonFlicker{
+  0%,95%,100%{opacity:1;text-shadow:0 0 20px rgba(255,74,47,0.8),0 0 40px rgba(255,74,47,0.5),0 0 80px rgba(255,74,47,0.3);}
+  96%{opacity:0.85;text-shadow:0 0 10px rgba(255,74,47,0.5);}
+  97%{opacity:1;text-shadow:0 0 20px rgba(255,74,47,0.8),0 0 40px rgba(255,74,47,0.5);}
+  98%{opacity:0.9;text-shadow:none;}
+  99%{opacity:1;text-shadow:0 0 20px rgba(255,74,47,0.8),0 0 40px rgba(255,74,47,0.5),0 0 80px rgba(255,74,47,0.3);}
+}
+@keyframes neonFlicker2{
+  0%,90%,100%{opacity:1;}
+  91%{opacity:0.7;}
+  92%{opacity:1;}
+  93%{opacity:0.8;}
+  94%{opacity:1;}
+}
+.neon-dividers{
+  display:flex;align-items:center;justify-content:center;gap:24px;
+  margin-bottom:50px;
+}
+.neon-line{width:60px;height:1.5px;background:linear-gradient(90deg,transparent,var(--chili-glow));}
+.neon-line.rev{background:linear-gradient(90deg,var(--chili-glow),transparent);}
+.neon-star{color:var(--tequila-pale);font-size:1.2rem;}
+.neon-pills{
+  display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:20px;
+}
+.neon-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.65rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;
+  padding:10px 20px;
+  border:1px solid rgba(196,43,26,0.4);
+  color:var(--smoke-dim);
+  transition:all .3s;cursor:default;
+}
+.neon-pill:hover{border-color:var(--chili-glow);color:var(--chili-glow);background:rgba(196,43,26,0.06);}
+
+/* ═══════════════════════════════════════
+   PHOTO UPLOAD GRID (Placeholder)
+═══════════════════════════════════════ */
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:auto;
+  gap:3px;
+  margin-top:20px;
+}
+.photo-cell{
+  background:var(--shadow);
+  aspect-ratio:1;
+  overflow:hidden;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;
+  border:1px solid rgba(196,43,26,0.1);
+  cursor:pointer;transition:all .35s;
+}
+.photo-cell.tall{grid-row:span 2;aspect-ratio:unset;}
+.photo-cell.wide{grid-column:span 2;aspect-ratio:2/1;}
+.photo-cell:hover{border-color:rgba(196,43,26,0.45);}
+.photo-cell:hover .pc-overlay{opacity:1;}
+.pc-emoji{font-size:2.8rem;filter:drop-shadow(0 0 14px rgba(196,43,26,0.35));}
+.pc-label{font-size:0.62rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--smoke-dim);}
+.pc-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(196,43,26,0.12),rgba(232,40,122,0.06));
+  opacity:0;transition:opacity .35s;
+}
+.pc-tag{
+  position:absolute;bottom:14px;left:14px;
+  font-size:0.55rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--tequila);
+  border-bottom:1px solid rgba(212,137,26,0.3);
+  padding-bottom:3px;
+}
+@media(max-width:700px){
+  .photo-grid{grid-template-columns:repeat(2,1fr);}
+  .photo-cell.wide{grid-column:span 2;}
+  .photo-cell.tall{grid-row:span 1;}
+  .neon-section{padding:70px 24px;}
+  .ticker-item{padding:0 24px;font-size:0.85rem;}
+}
+
+/* ═══════════════════════════════════════
+   FIND US SECTION
+═══════════════════════════════════════ */
+.find-us{
+  background:var(--shadow);
+  border-top:1px solid rgba(196,43,26,0.15);
+}
+.find-us-inner{
+  max-width:1400px;margin:0 auto;
+  padding:90px 60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.fu-map{
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.15);
+  aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:18px;
+  position:relative;overflow:hidden;
+}
+.fu-map::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(196,43,26,0.08) 0%,transparent 60%),
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(196,43,26,0.04) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(196,43,26,0.04) 40px);
+  pointer-events:none;
+}
+.fu-map-pin{font-size:3.5rem;animation:pinBounce 2s ease-in-out infinite;position:relative;z-index:2;}
+@keyframes pinBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.fu-map-label{font-family:'Bebas Neue',cursive;font-size:1rem;letter-spacing:0.12em;color:var(--smoke-dim);position:relative;z-index:2;}
+.fu-map-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:0.65rem;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;
+  padding:12px 24px;border:1px solid rgba(196,43,26,0.3);
+  color:var(--chili-glow);text-decoration:none;
+  transition:all .3s;position:relative;z-index:2;
+}
+.fu-map-btn:hover{background:rgba(196,43,26,0.08);}
+.fu-text h2{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(2.5rem,5vw,4rem);
+  letter-spacing:0.04em;color:var(--cream);
+  line-height:0.9;margin-bottom:20px;
+}
+.fu-text h2 span{color:var(--tequila-pale);}
+.fu-text p{font-size:0.9rem;line-height:1.85;color:var(--smoke);margin-bottom:28px;}
+.fu-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:30px;}
+.fu-contact-cell{
+  background:var(--deep);
+  border:1px solid rgba(196,43,26,0.1);
+  padding:20px;transition:border-color .3s;
+}
+.fu-contact-cell:hover{border-color:rgba(196,43,26,0.3);}
+.fu-cc-label{font-size:0.55rem;font-weight:800;letter-spacing:0.24em;text-transform:uppercase;color:var(--chili-glow);margin-bottom:6px;}
+.fu-cc-val{font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:0.06em;color:var(--cream);}
+@media(max-width:900px){
+  .find-us-inner{grid-template-columns:1fr;gap:40px;}
+  .fu-contact-grid{grid-template-columns:1fr;}
+}
+@media(max-width:700px){
+  .find-us-inner{padding:60px 24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══ NEON LOADER ═══════════════════════════════════════════ -->
+<div id="loader">
+  <div id="loader-bg"></div>
+  <div id="loader-content">
+
+    <!-- STAGE: cactus absolute, logo centered -->
+    <div id="loader-stage">
+
+      <!-- CACTUS LEFT — absolute -->
+      <div class="loader-cactus lc-l" id="lc-left">
+        <svg viewBox="0 0 80 130" xmlns="http://www.w3.org/2000/svg" width="64" height="105">
+          <ellipse cx="40" cy="19" rx="34" ry="7" fill="#c8a020" opacity="0.93"/>
+          <ellipse cx="40" cy="13" rx="17" ry="9" fill="#e0b828"/>
+          <rect x="28" y="13" width="24" height="6" fill="#e0b828"/>
+          <rect x="24" y="17" width="32" height="3.5" fill="#c42b1a" rx="1"/>
+          <rect x="32" y="24" width="16" height="66" rx="8" fill="#2d8a3e"/>
+          <rect x="17" y="43" width="17" height="10" rx="5" fill="#2d8a3e"/>
+          <rect x="17" y="34" width="10" height="22" rx="5" fill="#2d8a3e"/>
+          <rect x="46" y="53" width="17" height="10" rx="5" fill="#2d8a3e"/>
+          <rect x="53" y="44" width="10" height="22" rx="5" fill="#2d8a3e"/>
+          <rect x="37" y="28" width="3" height="38" rx="1.5" fill="#3daa50" opacity="0.45"/>
+          <circle cx="36" cy="37" r="2.4" fill="#071a09"/>
+          <circle cx="44" cy="37" r="2.4" fill="#071a09"/>
+          <path d="M35,44 Q40,50 45,44" stroke="#071a09" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="40" cy="90" rx="10" ry="4" fill="#1e6b2a"/>
+        </svg>
+      </div>
+
+      <!-- LOGO TEXT — centered -->
+      <div id="loader-logo">
+        <span id="ll-la"></span><span id="ll-cantina"></span>
+      </div>
+
+      <!-- CACTUS RIGHT — absolute -->
+      <div class="loader-cactus lc-r" id="lc-right">
+        <svg viewBox="0 0 80 130" xmlns="http://www.w3.org/2000/svg" width="64" height="105">
+          <ellipse cx="40" cy="19" rx="34" ry="7" fill="#c8a020" opacity="0.93"/>
+          <ellipse cx="40" cy="13" rx="17" ry="9" fill="#e0b828"/>
+          <rect x="28" y="13" width="24" height="6" fill="#e0b828"/>
+          <rect x="24" y="17" width="32" height="3.5" fill="#c42b1a" rx="1"/>
+          <rect x="32" y="24" width="16" height="66" rx="8" fill="#2d8a3e"/>
+          <rect x="17" y="53" width="17" height="10" rx="5" fill="#2d8a3e"/>
+          <rect x="17" y="44" width="10" height="22" rx="5" fill="#2d8a3e"/>
+          <rect x="46" y="43" width="17" height="10" rx="5" fill="#2d8a3e"/>
+          <rect x="53" y="34" width="10" height="22" rx="5" fill="#2d8a3e"/>
+          <rect x="37" y="28" width="3" height="38" rx="1.5" fill="#3daa50" opacity="0.45"/>
+          <circle cx="36" cy="37" r="2.4" fill="#071a09"/>
+          <circle cx="44" cy="37" r="2.4" fill="#071a09"/>
+          <path d="M35,44 Q40,50 45,44" stroke="#071a09" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="40" cy="90" rx="10" ry="4" fill="#1e6b2a"/>
+        </svg>
+      </div>
+
+    </div>
+
+    <div id="loader-tagline">GQEBERHA'S MEXICAN ESCAPE</div>
+    <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+  </div>
+</div>
+
+<style>
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#0a0609;transition:opacity .7s,visibility .7s;}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+#loader-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(196,43,26,0.1) 0%,transparent 65%),radial-gradient(ellipse 40% 30% at 20% 75%,rgba(45,138,62,0.07) 0%,transparent 55%);animation:loaderBgPulse 4s ease-in-out infinite;}
+@keyframes loaderBgPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+#loader-content{position:relative;z-index:2;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;}
+
+/* STAGE: relative container so cactus can be absolute */
+#loader-stage{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 90px; /* space reserved for cactus on each side */
+}
+
+/* LOGO centered inside stage */
+#loader-logo{display:flex;align-items:baseline;gap:0.08em;line-height:1;position:relative;z-index:2;}
+
+/* BLOOD ORANGE — La */
+#ll-la{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(3rem,11vw,7.5rem);
+  color:#e85d04;
+  text-shadow:0 0 15px rgba(232,93,4,0.95),0 0 35px rgba(232,93,4,0.65),0 0 70px rgba(232,93,4,0.4),0 0 130px rgba(232,93,4,0.2);
+  animation:neonOrangeF 5s ease-in-out infinite;
+  display:inline-block;opacity:0;transition:filter .07s;
+}
+/* CACTUS NEON GREEN — Cantina */
+#ll-cantina{
+  font-family:'Pacifico',cursive;
+  font-size:clamp(3rem,11vw,7.5rem);
+  color:#39d353;
+  text-shadow:0 0 15px rgba(57,211,83,0.95),0 0 35px rgba(57,211,83,0.65),0 0 70px rgba(57,211,83,0.4),0 0 130px rgba(57,211,83,0.2);
+  animation:neonGreenF 6s ease-in-out infinite;
+  display:inline-block;opacity:0;transition:filter .07s;
+}
+@keyframes neonOrangeF{
+  0%,87%,100%{text-shadow:0 0 15px rgba(232,93,4,.95),0 0 35px rgba(232,93,4,.65),0 0 70px rgba(232,93,4,.4),0 0 130px rgba(232,93,4,.2);}
+  88%{text-shadow:0 0 6px rgba(232,93,4,.5);opacity:.8;}
+  89%{text-shadow:0 0 15px rgba(232,93,4,.95),0 0 35px rgba(232,93,4,.65);}
+  90%{text-shadow:none;opacity:.85;}
+  91%{text-shadow:0 0 15px rgba(232,93,4,.95),0 0 35px rgba(232,93,4,.65),0 0 70px rgba(232,93,4,.4);}
+}
+@keyframes neonGreenF{
+  0%,92%,100%{text-shadow:0 0 15px rgba(57,211,83,.95),0 0 35px rgba(57,211,83,.65),0 0 70px rgba(57,211,83,.4),0 0 130px rgba(57,211,83,.2);}
+  93%{text-shadow:0 0 6px rgba(57,211,83,.4);opacity:.75;}
+  94%{text-shadow:0 0 15px rgba(57,211,83,.95),0 0 35px rgba(57,211,83,.65);}
+  95%{text-shadow:none;}
+  96%{text-shadow:0 0 15px rgba(57,211,83,.95),0 0 35px rgba(57,211,83,.65),0 0 70px rgba(57,211,83,.4);}
+}
+
+/* CACTUS — absolute, flanking the logo */
+.loader-cactus{
+  position:absolute;
+  bottom:0;
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .55s ease, transform .55s ease;
+  filter:drop-shadow(0 0 12px rgba(45,138,62,0.6));
+  z-index:1;
+}
+.loader-cactus.show{opacity:1;transform:translateY(0);}
+.lc-l{left:0;}
+.lc-r{right:0;}
+
+#loader-tagline{font-family:'Bebas Neue',cursive;font-size:clamp(.75rem,2.2vw,1rem);letter-spacing:.38em;color:rgba(240,180,74,.85);text-shadow:0 0 20px rgba(212,137,26,.4);opacity:0;transition:opacity .6s;}
+#loader-bar-wrap{width:220px;height:2px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;opacity:0;transition:opacity .4s;}
+#loader-bar{height:100%;width:0%;background:linear-gradient(90deg,#e85d04,#39d353,#e0b828);border-radius:2px;transition:width 2.8s cubic-bezier(.4,0,.2,1);}
+#loader-credit{display:none;}
+</style>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="fiesta-canvas"></canvas>
+
+<!-- MOBILE NAV -->
+<nav id="mob-nav">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="#" onclick="closeMob()">Home</a>
+  <a href="#experience" onclick="closeMob()">The Vibe</a>
+  <a href="#events" onclick="closeMob()">Events</a>
+  <a href="#menu" onclick="closeMob()">Menu</a>
+  <a href="#reserve" onclick="closeMob()">Book a Table</a>
+</nav>
+
+<!-- NAVBAR -->
+<header id="nav">
+  <a class="nav-logo" href="#">
+    <span class="nl-main">La <span class="ac">Cantina</span></span>
+    <span class="nl-sub">Authentic Mexican · PE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#experience">The Vibe</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#atmosphere">Gallery</a></li>
+  </ul>
+  <a class="nav-book" href="#reserve"><span>🌮 Reserve a Table</span></a>
+  <button class="ham" onclick="openMob()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ═══ MARQUEE TICKER ═══════════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot">🌮</span> Taco Tuesday · 2 Tacos for R89</span>
+    <span class="ticker-item"><span class="ticker-dot">🎸</span> Fiesta Friday · Live Music Every Week</span>
+    <span class="ticker-item"><span class="ticker-dot">🥃</span> El Jimador Tequila · R25 a Shot</span>
+    <span class="ticker-item"><span class="ticker-dot">🍔</span> Smash Burger Thursday · Burger & Chips R105</span>
+    <span class="ticker-item"><span class="ticker-dot">🧠</span> Trivia Night · Wednesday · Prizes</span>
+    <span class="ticker-item"><span class="ticker-dot">🎺</span> Jazz Evening · 12 May 2026 · Book Now</span>
+    <span class="ticker-item"><span class="ticker-dot">🚗</span> Now on Uber Eats · Pinelands PE</span>
+    <span class="ticker-item"><span class="ticker-dot">📲</span> Reservations · 066 085 0836</span>
+    <!-- duplicate for seamless scroll -->
+    <span class="ticker-item"><span class="ticker-dot">🌮</span> Taco Tuesday · 2 Tacos for R89</span>
+    <span class="ticker-item"><span class="ticker-dot">🎸</span> Fiesta Friday · Live Music Every Week</span>
+    <span class="ticker-item"><span class="ticker-dot">🥃</span> El Jimador Tequila · R25 a Shot</span>
+    <span class="ticker-item"><span class="ticker-dot">🍔</span> Smash Burger Thursday · Burger & Chips R105</span>
+    <span class="ticker-item"><span class="ticker-dot">🧠</span> Trivia Night · Wednesday · Prizes</span>
+    <span class="ticker-item"><span class="ticker-dot">🎺</span> Jazz Evening · 12 May 2026 · Book Now</span>
+    <span class="ticker-item"><span class="ticker-dot">🚗</span> Now on Uber Eats · Pinelands PE</span>
+    <span class="ticker-item"><span class="ticker-dot">📲</span> Reservations · 066 085 0836</span>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Papel Picado Banner -->
+  <div class="picado-banner">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path class="picado-string" d="M0,20 Q120,5 240,20 Q360,35 480,18 Q600,5 720,20 Q840,35 960,18 Q1080,5 1200,20 Q1320,35 1440,18"/>
+      <!-- Colorful triangles hanging from string -->
+      <g>
+        <!-- Red -->
+        <polygon points="80,20 100,60 60,60" fill="rgba(196,43,26,0.7)"/>
+        <polygon points="80,60 100,60 90,75" fill="rgba(196,43,26,0.5)"/>
+        <!-- Pink -->
+        <polygon points="200,18 220,58 180,58" fill="rgba(232,40,122,0.7)"/>
+        <polygon points="200,58 220,58 210,73" fill="rgba(232,40,122,0.5)"/>
+        <!-- Tequila -->
+        <polygon points="340,22 360,62 320,62" fill="rgba(212,137,26,0.7)"/>
+        <polygon points="340,62 360,62 350,77" fill="rgba(212,137,26,0.5)"/>
+        <!-- Lime -->
+        <polygon points="460,16 480,56 440,56" fill="rgba(61,181,74,0.7)"/>
+        <polygon points="460,56 480,56 470,71" fill="rgba(61,181,74,0.5)"/>
+        <!-- Cyan -->
+        <polygon points="590,20 610,60 570,60" fill="rgba(13,204,200,0.7)"/>
+        <!-- Red -->
+        <polygon points="720,18 740,58 700,58" fill="rgba(196,43,26,0.7)"/>
+        <!-- Pink -->
+        <polygon points="850,22 870,62 830,62" fill="rgba(232,40,122,0.7)"/>
+        <!-- Tequila -->
+        <polygon points="980,16 1000,56 960,56" fill="rgba(212,137,26,0.7)"/>
+        <!-- Lime -->
+        <polygon points="1100,20 1120,60 1080,60" fill="rgba(61,181,74,0.7)"/>
+        <!-- Red -->
+        <polygon points="1240,18 1260,58 1220,58" fill="rgba(196,43,26,0.7)"/>
+        <!-- Pink -->
+        <polygon points="1380,22 1400,62 1360,62" fill="rgba(232,40,122,0.7)"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Orb -->
+  <div class="hero-orb">
+    <div class="orb-inner">🌮</div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow reveal">
+      <div class="eyebrow-dot"></div>
+      <span class="eyebrow-text">179A Circular Drive, Pinelands · Port Elizabeth</span>
+      <div class="eyebrow-line"></div>
+    </div>
+
+    <h1 class="hero-title">
+      <span>NOT JUST</span>
+      <span class="line-red">DINNER.</span>
+      <span class="line-script">A night out you won't forget.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Port Elizabeth's most electric Mexican experience. <strong>Live music. Bold flavours. Tequila. Community.</strong> This is where your night begins and ends — on your terms.
+    </p>
+
+    <div class="hero-btns">
+      <a class="btn-fiesta" href="#reserve"><span>🎉 Book Your Table</span></a>
+      <a class="btn-ghost" href="#menu"><span>View Menu →</span></a>
+    </div>
+
+    <div class="hero-live-badge">
+      <div class="live-dot"></div>
+      <span class="live-text">Tonight</span>
+      <span class="live-event">— Fiesta Friday with live acoustic · 6PM–9PM</span>
+    </div>
+
+    <div class="hero-badges">
+      <div class="hbadge"><span class="hbadge-icon">🎸</span><span>Live Music Weekly</span></div>
+      <div class="hbadge-div"></div>
+      <div class="hbadge"><span class="hbadge-icon">🍹</span><span>R25 Tequila Shots</span></div>
+      <div class="hbadge-div"></div>
+      <div class="hbadge"><span class="hbadge-icon">🌮</span><span>Taco Tuesday R89</span></div>
+      <div class="hbadge-div"></div>
+      <div class="hbadge"><span class="hbadge-icon">🚗</span><span>On Uber Eats</span></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-wheel"></div>
+    <span class="scroll-text">Scroll to explore</span>
+  </div>
+</section>
+
+<!-- ═══ INFO STRIP ═══════════════════════════════════════════ -->
+<div class="info-strip">
+  <div class="info-strip-inner">
+    <a class="is-cell" href="#reserve">
+      <span class="is-icon">🕐</span>
+      <div>
+        <div class="is-label">Hours</div>
+        <div class="is-val">Mon–Sun · Lunch & Dinner</div>
+        <div class="is-sub">Kitchen open for dine-in & takeaway</div>
+      </div>
+    </a>
+    <a class="is-cell" href="https://wa.me/27660850836" target="_blank">
+      <span class="is-icon">📍</span>
+      <div>
+        <div class="is-label">Location</div>
+        <div class="is-val">179A Circular Drive, Pinelands</div>
+        <div class="is-sub">Port Elizabeth · Easy parking</div>
+      </div>
+    </a>
+    <a class="is-cell" href="https://wa.me/27660850836" target="_blank">
+      <span class="is-icon">📲</span>
+      <div>
+        <div class="is-label">Reservations</div>
+        <div class="is-val">066 085 0836</div>
+        <div class="is-sub">WhatsApp us for instant booking</div>
+      </div>
+    </a>
+    <a class="is-cell" href="#events">
+      <span class="is-icon">🎪</span>
+      <div>
+        <div class="is-label">This Week</div>
+        <div class="is-val">Fiesta Friday · Taco Tuesday</div>
+        <div class="is-sub">Jazz Night · Trivia · Live Music</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ EXPERIENCE SECTION ═══════════════════════════════════════════ -->
+<section id="experience">
+  <div class="sw">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">Why people stay longer than they planned</span>
+    </div>
+
+    <div class="xp-intro-grid">
+      <div class="xp-text reveal-left">
+        <div class="big-quote">"This isn't dinner. This is escapism."</div>
+        <p>La Cantina is where suburban Port Elizabeth comes to <strong>forget the week</strong>. Whether it's a date night, a birthday, a random Tuesday, or a live music session that pulled you in from the parking lot — once you're here, you stay.</p>
+        <p>The colours are loud. The tequila is cold. The tacos are real. The music hits different at night. And the crowd? They come back every week. That says everything.</p>
+        <a class="btn-fiesta" href="#reserve" style="display:inline-flex;margin-top:10px;"><span>🌮 Join the Fiesta</span></a>
+      </div>
+      <div class="xp-visual reveal-right">
+        <div class="xp-frame xp-frame-1">
+          <div class="xp-frame-emoji">🎸</div>
+          <span style="position:absolute;bottom:20px;left:20px;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--smoke-dim);font-weight:800;">Live Every Weekend</span>
+        </div>
+        <div class="xp-corner">🌮</div>
+        <div class="xp-frame xp-frame-2">
+          <div class="xp-frame-emoji">🍹</div>
+          <span style="position:absolute;bottom:20px;right:20px;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--smoke-dim);font-weight:800;text-align:right;">Craft Cocktails</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIBE CARDS -->
+    <div class="vibe-grid">
+      <div class="vibe-card reveal" style="transition-delay:.05s">
+        <span class="vc-icon">🎸</span>
+        <div class="vc-title">Live Music</div>
+        <p class="vc-text">Acoustic performers, DJ sets, and nights where the music goes late. Every week there's something live on stage at La Cantina.</p>
+        <span class="vc-tag">Every Friday & Saturday</span>
+      </div>
+      <div class="vibe-card reveal" style="transition-delay:.12s">
+        <span class="vc-icon">🌮</span>
+        <div class="vc-title">Legendary Tacos</div>
+        <p class="vc-text">Chicken, beef, and vegetarian — our tacos come loaded with guac, pico de gallo, and Manny's secret sauce. Tuesday means R89 for 2.</p>
+        <span class="vc-tag">Taco Tuesday Weekly</span>
+      </div>
+      <div class="vibe-card reveal" style="transition-delay:.18s">
+        <span class="vc-icon">🥃</span>
+        <div class="vc-title">Tequila Bar</div>
+        <p class="vc-text">El Jimador Reposado at R25 a shot. Margaritas that hit. Cocktails that stay. We're the best tequila bar in PE — full stop.</p>
+        <span class="vc-tag">Specials All Week</span>
+      </div>
+      <div class="vibe-card reveal" style="transition-delay:.24s">
+        <span class="vc-icon">🧠</span>
+        <div class="vc-title">Trivia Nights</div>
+        <p class="vc-text">Grab your crew and test your knowledge. Trivia nights at La Cantina are legendary — prizes, laughs, and tequila shots for the winners.</p>
+        <span class="vc-tag">Wednesday Nights</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ NEON SIGN & PHOTO GRID ═══════════════════════════════════════════ -->
+<div class="neon-section">
+  <span class="neon-big reveal">La Cantina</span>
+  <span class="neon-sub-text reveal">GQEBERHA'S MEXICAN ESCAPE</span>
+  <div class="neon-dividers reveal">
+    <div class="neon-line rev"></div>
+    <span class="neon-star">✦</span>
+    <div class="neon-line rev" style="transform:scaleX(-1)"></div>
+    <span class="neon-star" style="color:var(--pink-glow)">★</span>
+    <div class="neon-line"></div>
+    <span class="neon-star">✦</span>
+    <div class="neon-line" style="transform:scaleX(-1)"></div>
+  </div>
+  <div class="neon-pills reveal">
+    <span class="neon-pill">🌮 Tacos</span>
+    <span class="neon-pill">🍕 Pizzas</span>
+    <span class="neon-pill">🍔 Smash Burgers</span>
+    <span class="neon-pill">🥃 Tequila Bar</span>
+    <span class="neon-pill">🎸 Live Music</span>
+    <span class="neon-pill">🧠 Trivia Nights</span>
+    <span class="neon-pill">🪅 Private Events</span>
+    <span class="neon-pill">🚗 Uber Eats</span>
+  </div>
+</div>
+
+<!-- PHOTO GRID (replace emoji with real photos when available) -->
+<div style="max-width:1400px;margin:0 auto;padding:0 60px 80px;position:relative;z-index:2;" class="reveal">
+  <div class="stag" style="margin-bottom:24px;padding-top:80px;">
+    <div class="stag-line"></div>
+    <span class="stag-text">The Look & Feel</span>
+  </div>
+  <div class="section-title" style="margin-bottom:30px;">THE <span class="acc">ATMOSPHERE</span></div>
+  <div class="photo-grid">
+    <div class="photo-cell tall" style="padding:0;overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/Fiesta_friday.jpg" alt="Fiesta Friday Live Music" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">Fiesta Friday</span>
+    </div>
+    <div class="photo-cell" style="padding:0;overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/Tacos.jpg" alt="Signature Tacos" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">The Food</span>
+    </div>
+    <div class="photo-cell" style="padding:0;overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/Assist.jpg" alt="La Cantina Service" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">The Experience</span>
+    </div>
+    <div class="photo-cell wide" style="padding:0;overflow:hidden;background:#0a0609;aspect-ratio:851/315 !important;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/facebook_cover.jpg" alt="La Cantina Cover" style="width:100%;height:100%;object-fit:contain;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">Welcome to La Cantina</span>
+    </div>
+    <div class="photo-cell" style="padding:0;overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/Patrons.jpg" alt="La Cantina Patrons" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">The Community</span>
+    </div>
+    <div class="photo-cell tall" style="padding:0;overflow:hidden;">
+      <img src="https://raw.githubusercontent.com/middleAgedCoda/LA-CANTINA/main/opening_shop.jpg" alt="La Cantina Opening" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">The Venue</span>
+    </div>
+    <div class="photo-cell">
+      <div class="pc-emoji">🧠</div>
+      <div class="pc-label">Trivia Night Winners</div>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">Wednesdays</span>
+    </div>
+    <div class="photo-cell">
+      <div class="pc-emoji">🪅</div>
+      <div class="pc-label">Themed Nights & Parties</div>
+      <div class="pc-overlay"></div>
+      <span class="pc-tag">Special Events</span>
+    </div>
+  </div>
+  <p style="font-size:0.72rem;color:var(--smoke-dim);text-align:center;margin-top:18px;letter-spacing:0.08em;">📸 Follow us on <strong style="color:var(--cream);">Facebook & Instagram</strong> for live photos from every event</p>
+</div>
+
+<!-- ═══ EVENTS THIS WEEK ═══════════════════════════════════════════ -->
+<section id="events">
+  <div class="sw">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">Live at La Cantina</span>
+    </div>
+    <div class="section-title reveal">YOUR WEEK<br><span class="acc">SORTED.</span></div>
+    <p class="section-sub reveal">We run the best themed nights in Gqeberha. From Fiesta Fridays to Jazz evenings — there's always a reason to come back.</p>
+
+    <div class="events-grid">
+      <div class="event-card reveal" style="transition-delay:.05s">
+        <div class="ec-day">Tuesday</div>
+        <span class="ec-emoji">🌮</span>
+        <div class="ec-name">TACO TUESDAY</div>
+        <p class="ec-desc">The classic. 2x chicken tacos for only R89. Dine-in only. Come hungry, leave happy. The best value night of your week — guaranteed.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">R89 Special</span>
+          <span class="ec-tag">Dine-In</span>
+        </div>
+      </div>
+
+      <div class="event-card featured reveal" style="transition-delay:.1s">
+        <div class="ec-featured-badge">This Week</div>
+        <div class="ec-day">Friday</div>
+        <span class="ec-emoji">🎸</span>
+        <div class="ec-name">FIESTA FRIDAY</div>
+        <p class="ec-desc">Live acoustic from 6PM to 9PM. Edward Allen takes the stage. Reserve your table early — Fiesta Fridays sell out. Drink specials all night.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">Live Music</span>
+          <span class="ec-tag">6PM – 9PM</span>
+          <span class="ec-tag">Table Required</span>
+        </div>
+      </div>
+
+      <div class="event-card reveal" style="transition-delay:.15s">
+        <div class="ec-day">Thursday</div>
+        <span class="ec-emoji">🍔</span>
+        <div class="ec-name">SMASH BURGER NIGHT</div>
+        <p class="ec-desc">DJ Nolan behind the decks + smash burger & chips for R105. Castle Lite or Black Label draught at R30 from 5–7PM. A proper Thursday night.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">DJ Nolan</span>
+          <span class="ec-tag">R105 Burger Deal</span>
+          <span class="ec-tag">Dine-In Only</span>
+        </div>
+      </div>
+
+      <div class="event-card reveal" style="transition-delay:.2s">
+        <div class="ec-day">Wednesday</div>
+        <span class="ec-emoji">🧠</span>
+        <div class="ec-name">TRIVIA NIGHT</div>
+        <p class="ec-desc">Book your table. Gather your team. Question rounds, prizes, and tequila. The most competitive Wednesday night in PE happens right here.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">Team Game</span>
+          <span class="ec-tag">Prizes</span>
+        </div>
+      </div>
+
+      <div class="event-card reveal" style="transition-delay:.25s">
+        <div class="ec-day">Saturday</div>
+        <span class="ec-emoji">🎺</span>
+        <div class="ec-name">JAZZ EVENINGS</div>
+        <p class="ec-desc">Upcoming: Jazz Evening on Tuesday 12 May 2026. Live jazz, great food, signature cocktails. Dress up or dress down — you're welcome either way.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">12 May 2026</span>
+          <span class="ec-tag">Live Jazz</span>
+        </div>
+      </div>
+
+      <div class="event-card reveal" style="transition-delay:.3s">
+        <div class="ec-day">Cinco de Mayo & More</div>
+        <span class="ec-emoji">🪅</span>
+        <div class="ec-name">SPECIAL EVENTS</div>
+        <p class="ec-desc">Themed celebrations, Cinco de Mayo parties, face painters, best-dressed prizes. We do events right. Follow us on Facebook for the latest.</p>
+        <div class="ec-tags">
+          <span class="ec-tag">Seasonal</span>
+          <span class="ec-tag">Community</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-cta reveal">
+      <p>Don't miss your night — tables fill fast on live music evenings.</p>
+      <a class="btn-fiesta" href="#reserve"><span>🎉 Reserve for an Event</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MENU ═══════════════════════════════════════════ -->
+<section id="menu">
+  <div class="sw">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">The Food</span>
+    </div>
+    <div class="menu-header">
+      <div class="section-title reveal">THE <span class="acc">MENU</span></div>
+      <div class="menu-tabs reveal">
+        <button class="mtab active" onclick="switchTab(this,'panel-mex')">🌮 Mexican</button>
+        <button class="mtab" onclick="switchTab(this,'panel-pizza')">🍕 Pizzas</button>
+        <button class="mtab" onclick="switchTab(this,'panel-burgers')">🍔 Burgers</button>
+        <button class="mtab" onclick="switchTab(this,'panel-drinks')">🍹 Drinks</button>
+        <button class="mtab" onclick="switchTab(this,'panel-kids')">🧒 El Niño</button>
+        <button class="mtab" onclick="switchTab(this,'panel-extras')">➕ Extras</button>
+      </div>
+    </div>
+
+    <div class="menu-body reveal">
+      <!-- MEXICAN PANEL -->
+      <div id="panel-mex" class="menu-panel active">
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🌮</span>
+          <div class="dc-name">TACOS</div>
+          <div class="dc-variants">
+            x2: Chicken R125 · Beef R135 · Veg R125<br>
+            x3: Chicken R145 · Beef R155 · Veg R145
+          </div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R125</span>
+            <span class="dc-spicy">🌶️</span>
+          </div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🫔</span>
+          <div class="dc-name">BURRITOS</div>
+          <div class="dc-variants">Chicken R145 · Beef R155 · Vegetarian R145<br>Loaded with rice, beans & cheese</div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R145</span>
+            <span class="dc-spicy">🌶️🌶️</span>
+          </div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🧀</span>
+          <div class="dc-name">QUESADILLAS</div>
+          <div class="dc-variants">Chicken R145 · Beef R155 · Vegetarian R145<br>Grilled with cheese & jalapeño</div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R145</span>
+            <span class="dc-badge">Fan Fave</span>
+          </div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍟</span>
+          <div class="dc-name">LOADED FRIES</div>
+          <div class="dc-variants">Chicken R145 · Beef R155 · Vegetarian R145<br>Topped with guac, sour cream & salsa</div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R145</span>
+            <span class="dc-spicy">🌶️</span>
+          </div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🫕</span>
+          <div class="dc-name">NACHOS</div>
+          <div class="dc-variants">Chicken R145 · Beef R155 · Vegetarian R145<br>Mountain of crispy chips & toppings</div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R145</span>
+            <span class="dc-badge">Share</span>
+          </div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍮</span>
+          <div class="dc-name">DESSERTS</div>
+          <div class="dc-variants">Churros & Chocolate Sauce — R55<br>Ice Cream & Chocolate Sauce — R45</div>
+          <div class="dc-price-row">
+            <span class="dc-price">From R45</span>
+            <span class="dc-badge">Sweet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIZZA PANEL -->
+      <div id="panel-pizza" class="menu-panel">
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">CHEESE & BASIL</div>
+          <div class="dc-variants">Classic mozzarella, fresh basil, tomato base</div>
+          <div class="dc-price-row"><span class="dc-price">R125</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">HAM, MUSHROOM & CHEESE</div>
+          <div class="dc-variants">Generous ham, sautéed mushrooms, double cheese</div>
+          <div class="dc-price-row"><span class="dc-price">R160</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">PEPPERONI, BASIL & CHEESE</div>
+          <div class="dc-variants">Classic pepperoni with fresh basil & mozzarella</div>
+          <div class="dc-price-row"><span class="dc-price">R160</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">CHICKEN, MAYO & CHEESE</div>
+          <div class="dc-variants">Tender chicken, creamy mayo, loaded cheese</div>
+          <div class="dc-price-row"><span class="dc-price">R170</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">CHICKEN, PEPPERS, JALAPEÑO & MANNY'S</div>
+          <div class="dc-variants">Chicken, mixed peppers, jalapeño, onion & Manny's sauce</div>
+          <div class="dc-price-row"><span class="dc-price">R180</span><span class="dc-badge">House Special</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">PEPPERONI, SALAMI & CHEESE</div>
+          <div class="dc-variants">Double meat lovers — pepperoni, salami & mozzarella</div>
+          <div class="dc-price-row"><span class="dc-price">R180</span><span class="dc-spicy">🌶️</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">STEAK, PEPPER & MUSHROOM</div>
+          <div class="dc-variants">Tender steak strips, mixed peppers & sautéed mushrooms</div>
+          <div class="dc-price-row"><span class="dc-price">R180</span><span class="dc-badge">Premium</span></div>
+        </div>
+      </div>
+
+      <!-- BURGERS PANEL -->
+      <div id="panel-burgers" class="menu-panel">
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍔</span>
+          <div class="dc-name">SMASH BURGER</div>
+          <div class="dc-variants">Smashed beef patty, cheese, brioche bun & chips</div>
+          <div class="dc-price-row"><span class="dc-price">R120</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍔</span>
+          <div class="dc-name">DOUBLE SMASH</div>
+          <div class="dc-variants">Double smashed patties, double cheese, loaded bun & chips</div>
+          <div class="dc-price-row"><span class="dc-price">R140</span><span class="dc-badge">Beast Mode</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍗</span>
+          <div class="dc-name">CHICKEN BURGER</div>
+          <div class="dc-variants">Crispy chicken fillet, cheese, brioche bun & chips</div>
+          <div class="dc-price-row"><span class="dc-price">R120</span></div>
+        </div>
+      </div>
+
+      <!-- DRINKS PANEL -->
+      <div id="panel-drinks" class="menu-panel drinks-layout">
+        <div class="drinks-grid">
+          <div>
+            <div class="drink-cat-title">🥃 Tequila & Shots</div>
+            <div class="drink-item"><span class="drink-name">El Jimador Reposado</span><span class="drink-price">R25</span></div>
+            <div class="drink-item"><span class="drink-name">Tequila Shot (House)</span><span class="drink-price">From R25</span></div>
+            <div class="drink-cat-title" style="margin-top:32px;">🍺 Beer</div>
+            <div class="drink-item"><span class="drink-name">Castle Lite Draught</span><span class="drink-price">R30</span></div>
+            <div class="drink-item"><span class="drink-name">Carling Black Label Draught</span><span class="drink-price">R30</span></div>
+            <div style="font-size:0.68rem;color:var(--smoke-dim);margin-top:6px;">5PM–7PM special pricing on selected evenings</div>
+          </div>
+          <div>
+            <div class="drink-cat-title">🥤 Brandy & Mixers</div>
+            <div class="drink-item"><span class="drink-name">2x Double KWV3 & 300ml Coke</span><span class="drink-price">R75</span></div>
+            <div class="drink-cat-title" style="margin-top:32px;">🍹 Cocktails & More</div>
+            <div class="drink-item"><span class="drink-name">Margarita (Classic)</span><span class="drink-price">Ask us</span></div>
+            <div class="drink-item"><span class="drink-name">House Cocktails</span><span class="drink-price">Ask us</span></div>
+            <div class="drink-item"><span class="drink-name">Soft Drinks</span><span class="drink-price">Ask us</span></div>
+            <div style="font-size:0.68rem;color:var(--smoke-dim);margin-top:14px;">📲 Call 066 085 0836 for our full drinks menu</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KIDS PANEL -->
+      <div id="panel-kids" class="menu-panel kids-layout">
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍗</span>
+          <div class="dc-name">CHICKEN STRIPS & CHIPS</div>
+          <div class="dc-variants">Under 12 years · Tender chicken strips, crispy chips</div>
+          <div class="dc-price-row"><span class="dc-price">R70</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍔</span>
+          <div class="dc-name">CHICKEN BURGER & CHIPS</div>
+          <div class="dc-variants">Under 12 years · Kid-size chicken burger, cheese & chips</div>
+          <div class="dc-price-row"><span class="dc-price">R100</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍔</span>
+          <div class="dc-name">SMASH CHEESE BURGER & CHIPS</div>
+          <div class="dc-variants">Under 12 years · Kid-size smash burger, cheese & chips</div>
+          <div class="dc-price-row"><span class="dc-price">R110</span></div>
+        </div>
+        <div class="dish-card">
+          <div class="dc-hover"></div>
+          <span class="dc-emoji">🍕</span>
+          <div class="dc-name">MINI PIZZA</div>
+          <div class="dc-variants">Cheese — R70 &nbsp;·&nbsp; Ham & Cheese — R80<br>Under 12 years</div>
+          <div class="dc-price-row"><span class="dc-price">From R70</span></div>
+        </div>
+      </div>
+
+      <!-- EXTRAS PANEL -->
+      <div id="panel-extras" class="menu-panel drinks-layout">
+        <div class="drinks-grid">
+          <div>
+            <div class="drink-cat-title">➕ Extras & Add-ons</div>
+            <div class="drink-item"><span class="drink-name">Jalapeño</span><span class="drink-price">R20</span></div>
+            <div class="drink-item"><span class="drink-name">Pico de Gallo (seasonal)</span><span class="drink-price">R30</span></div>
+            <div class="drink-item"><span class="drink-name">Fajitas — Roasted Peppers & Onions</span><span class="drink-price">R40</span></div>
+            <div class="drink-item"><span class="drink-name">Guacamole</span><span class="drink-price">R30</span></div>
+            <div class="drink-item"><span class="drink-name">Sour Cream</span><span class="drink-price">R30</span></div>
+            <div class="drink-item"><span class="drink-name">Manny's Sauce</span><span class="drink-price">R15</span></div>
+            <div class="drink-item"><span class="drink-name">Jalapeño Sauce</span><span class="drink-price">R15</span></div>
+          </div>
+          <div>
+            <div class="drink-cat-title">🍟 Burger Upgrade</div>
+            <div class="drink-item"><span class="drink-name">Upgrade to Parmesan Fries</span><span class="drink-price">+R25</span></div>
+            <div style="font-size:0.72rem;color:var(--smoke-dim);margin-top:10px;line-height:1.7;">Available with any Smash Burger or Chicken Burger order.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;" class="reveal">
+      <p style="font-size:0.8rem;color:var(--smoke-dim);">Want the full extras menu? Guac, pico de gallo, fajitas, jalapeño — we've got it.</p>
+      <a class="wa-cta" href="https://wa.me/27660850836?text=Hi!%20I'd%20like%20to%20see%20the%20full%20menu." target="_blank">📲 WhatsApp for Full Menu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ATMOSPHERE STRIP ═══════════════════════════════════════════ -->
+<section id="atmosphere">
+  <div class="atm-header">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">The Atmosphere</span>
+    </div>
+    <div class="section-title reveal">FEEL THE <span class="pink">FIESTA</span></div>
+    <p class="section-sub reveal">You don't just eat at La Cantina. You feel it. Warm lights. Live music in the air. The smell of tacos. The sound of laughter. This is the PE experience you've been missing.</p>
+  </div>
+  <div class="atm-scroll">
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🎸</div>
+      <div class="atm-frame-label">Live Music Nights</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🌮</div>
+      <div class="atm-frame-label">Legendary Tacos</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🥂</div>
+      <div class="atm-frame-label">Celebrations Welcome</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🎉</div>
+      <div class="atm-frame-label">Themed Event Nights</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🌶️</div>
+      <div class="atm-frame-label">Bold Authentic Flavours</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🪅</div>
+      <div class="atm-frame-label">Cinco de Mayo Parties</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">🍹</div>
+      <div class="atm-frame-label">Tequila Bar</div>
+    </div>
+    <div class="atm-frame">
+      <div class="atm-frame-emoji">❤️</div>
+      <div class="atm-frame-label">Community at Heart</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ UBER EATS STRIP ═══════════════════════════════════════════ -->
+<div class="uber-strip reveal">
+  <div class="uber-inner">
+    <div class="uber-left">
+      <h3>🚗 Now on Uber Eats</h3>
+      <p>Can't make it in tonight? We bring the fiesta to you. Order La Cantina on Uber Eats — straight to your door.</p>
+    </div>
+    <div class="uber-badge">
+      <span class="uber-logo">Uber Eats</span>
+      <span style="font-size:0.75rem;color:var(--smoke-dim);">Search "La Cantina" · Pinelands, PE</span>
+    </div>
+    <a class="btn-fiesta" href="https://wa.me/27660850836?text=Hi!%20I'd%20like%20to%20pre-order%20a%20takeaway." target="_blank"><span>📲 Pre-order Takeaway</span></a>
+  </div>
+</div>
+
+<!-- ═══ TESTIMONIALS ═══════════════════════════════════════════ -->
+<section id="reviews">
+  <div class="sw">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">The Verdict</span>
+    </div>
+    <div class="section-title reveal">WHAT PE IS <span class="acc">SAYING</span></div>
+
+    <div class="rev-grid">
+      <div class="rev-card reveal" style="transition-delay:.05s">
+        <div class="rev-quote-bg">"</div>
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Walked past on a Friday and heard music. Stayed for four hours. Best night out in Port Elizabeth — easily. The tacos and the tequila? Unreal."</p>
+        <div class="rev-author">— A Regular at Fiesta Friday</div>
+      </div>
+      <div class="rev-card reveal" style="transition-delay:.1s">
+        <div class="rev-quote-bg">"</div>
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Taco Tuesday is non-negotiable in our house. R89 for two proper tacos — that deal doesn't exist anywhere else in PE. The vibe is everything."</p>
+        <div class="rev-author">— Tuesday Night Regular</div>
+      </div>
+      <div class="rev-card reveal" style="transition-delay:.15s">
+        <div class="rev-quote-bg">"</div>
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Did our graduation celebration here. The owners made a surprise poster for our bar ladies. It's that kind of place — family-run and they actually care."</p>
+        <div class="rev-author">— Graduation Night Crew</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FIND US ═══════════════════════════════════════════ -->
+<div class="find-us">
+  <div class="find-us-inner">
+    <div class="fu-map reveal-left">
+      <div class="fu-map-pin">📍</div>
+      <div class="fu-map-label">179A Circular Drive · Pinelands · PE</div>
+      <a class="fu-map-btn" href="https://maps.google.com/?q=179A+Circular+Drive+Pinelands+Port+Elizabeth" target="_blank">🗺️ Open in Google Maps</a>
+    </div>
+    <div class="fu-text reveal-right">
+      <h2>FIND <span>LA CANTINA</span></h2>
+      <p>We're tucked into Pinelands — easy to find, impossible to forget. Free parking at the door. You'll probably smell the food before you see the sign.</p>
+      <div class="fu-contact-grid">
+        <div class="fu-contact-cell">
+          <div class="fu-cc-label">Phone & WhatsApp</div>
+          <div class="fu-cc-val">066 085 0836</div>
+        </div>
+        <div class="fu-contact-cell">
+          <div class="fu-cc-label">Address</div>
+          <div class="fu-cc-val">179A Circular Drive, Pinelands</div>
+        </div>
+        <div class="fu-contact-cell">
+          <div class="fu-cc-label">Open</div>
+          <div class="fu-cc-val">Mon–Sun · Lunch & Dinner</div>
+        </div>
+        <div class="fu-contact-cell">
+          <div class="fu-cc-label">Delivery</div>
+          <div class="fu-cc-val">Uber Eats · PE</div>
+        </div>
+      </div>
+      <a class="wa-cta" href="https://wa.me/27660850836?text=Hi!%20I'm%20on%20my%20way%20to%20La%20Cantina." target="_blank" style="margin-top:30px;">💬 WhatsApp Us Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RESERVATION ═══════════════════════════════════════════ -->
+<section id="reserve">
+  <div class="sw">
+    <div class="stag reveal">
+      <div class="stag-line"></div>
+      <span class="stag-text">Secure Your Spot</span>
+    </div>
+    <div class="reserve-grid">
+      <div class="res-info reveal-left">
+        <span class="big-number">066</span>
+        <h3>085 0836 · WhatsApp Available</h3>
+        <p>Table reservations go fast — especially on Fiesta Fridays and live music nights. Lock in your spot below or drop us a WhatsApp and we'll sort you out.</p>
+
+        <a class="wa-cta" href="https://wa.me/27660850836?text=Hi!%20I'd%20like%20to%20book%20a%20table%20at%20La%20Cantina." target="_blank">
+          <span>💬 WhatsApp to Book Now</span>
+        </a>
+
+        <div class="res-details">
+          <div class="rd-row">
+            <span class="rd-icon">📍</span>
+            <div>
+              <div class="rd-label">Address</div>
+              <div class="rd-val">179A Circular Drive, Pinelands, Port Elizabeth</div>
+            </div>
+          </div>
+          <div class="rd-row">
+            <span class="rd-icon">🕐</span>
+            <div>
+              <div class="rd-label">Open Hours</div>
+              <div class="rd-val">Monday – Sunday · Lunch & Dinner</div>
+            </div>
+          </div>
+          <div class="rd-row">
+            <span class="rd-icon">🎸</span>
+            <div>
+              <div class="rd-label">Live Music</div>
+              <div class="rd-val">Fridays 6PM – 9PM + Special Events</div>
+            </div>
+          </div>
+          <div class="rd-row">
+            <span class="rd-icon">🚗</span>
+            <div>
+              <div class="rd-label">Uber Eats</div>
+              <div class="rd-val">Search "La Cantina" in the app</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-form reveal-right">
+        <div class="rf-title">Reserve Your Table</div>
+        <div class="rf-sub">We'll confirm your booking within 2 hours · No deposit required</div>
+
+        <div class="ff-row">
+          <div class="ff"><label>First Name</label><input type="text" placeholder="Your name"/></div>
+          <div class="ff"><label>Last Name</label><input type="text" placeholder="Surname"/></div>
+        </div>
+        <div class="ff"><label>Phone / WhatsApp</label><input type="tel" placeholder="066 000 0000"/></div>
+        <div class="ff-row">
+          <div class="ff"><label>Preferred Date</label><input type="date"/></div>
+          <div class="ff">
+            <label>Preferred Time</label>
+            <select>
+              <option>12:00 PM</option>
+              <option>1:00 PM</option>
+              <option>5:00 PM</option>
+              <option>6:00 PM</option>
+              <option selected>6:30 PM</option>
+              <option>7:00 PM</option>
+              <option>7:30 PM</option>
+              <option>8:00 PM</option>
+              <option>8:30 PM</option>
+            </select>
+          </div>
+        </div>
+        <div class="ff">
+          <label>Party Size</label>
+          <select>
+            <option>1 Guest</option>
+            <option selected>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5 Guests</option>
+            <option>6 Guests</option>
+            <option>7 Guests</option>
+            <option>8+ Guests (please WhatsApp us)</option>
+          </select>
+        </div>
+        <div class="ff">
+          <label>Occasion</label>
+          <div class="occasion-chips">
+            <div class="occ-chip active" onclick="toggleOcc(this)">Night Out</div>
+            <div class="occ-chip" onclick="toggleOcc(this)">🎂 Birthday</div>
+            <div class="occ-chip" onclick="toggleOcc(this)">🎉 Celebration</div>
+            <div class="occ-chip" onclick="toggleOcc(this)">💼 Business</div>
+            <div class="occ-chip" onclick="toggleOcc(this)">🎸 Live Music Night</div>
+          </div>
+        </div>
+        <div class="ff">
+          <label>Special Requests</label>
+          <textarea placeholder="Dietary needs, birthday surprises, group requirements..."></textarea>
+        </div>
+
+        <button class="rf-submit" onclick="handleBook(this)">
+          <span>🌮 Confirm My Table</span>
+        </button>
+        <div class="rf-note">🔒 No deposit required · WhatsApp confirmation within 2 hours</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="fb-logo-big" href="#">La <span class="ac">Cantina</span></a>
+        <span class="fb-tagline">Not just dinner. A night out.</span>
+        <p>Gqeberha's most electric Mexican cantina. Live music, legendary tacos, tequila, and a community that keeps coming back. Est. 2016 · 179A Circular Drive, Pinelands, PE.</p>
+        <div class="f-social">
+          <a class="fsc" href="#" title="Instagram">📷</a>
+          <a class="fsc" href="#" title="Facebook">f</a>
+          <a class="fsc" href="https://wa.me/27660850836" target="_blank" title="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div>
+        <div class="fc-title">Food & Drink</div>
+        <ul class="footer-links">
+          <li><a href="#menu">Mexican Menu</a></li>
+          <li><a href="#menu">Pizzas</a></li>
+          <li><a href="#menu">Smash Burgers</a></li>
+          <li><a href="#menu">Drinks & Tequila</a></li>
+          <li><a href="#menu">El Niño Kids Menu</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fc-title">Events</div>
+        <ul class="footer-links">
+          <li><a href="#events">Fiesta Friday</a></li>
+          <li><a href="#events">Taco Tuesday</a></li>
+          <li><a href="#events">Smash Burger Thursday</a></li>
+          <li><a href="#events">Trivia Nights</a></li>
+          <li><a href="#events">Jazz Evenings</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="fc-title">Visit Us</div>
+        <ul class="footer-links">
+          <li><a href="#reserve">Book a Table</a></li>
+          <li><a href="https://wa.me/27660850836" target="_blank">WhatsApp Us</a></li>
+          <li><a href="#menu">View Menu</a></li>
+          <li><a href="#">Find Us on Uber Eats</a></li>
+          <li><a href="#">Private Events</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="fbl">© 2026 La Cantina PE · 179A Circular Drive, Pinelands, Port Elizabeth · 066 085 0836</span>
+      <span class="fbr">Come for the tacos. Stay for the vibes. 🌮</span>
+    </div>
+    <div style="border-top:1px solid rgba(253,244,227,0.03);margin-top:18px;padding-top:16px;text-align:center;">
+      <span style="font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(253,244,227,0.18);">Website designed &amp; built by </span><a href="https://kuro-digital-acid-lime.onrender.com" target="_blank" style="font-size:0.58rem;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:#a8ff3e;text-decoration:none;text-shadow:0 0 8px rgba(168,255,62,0.3);transition:text-shadow .3s;" onmouseover="this.style.textShadow='0 0 16px rgba(168,255,62,0.7)'" onmouseout="this.style.textShadow='0 0 8px rgba(168,255,62,0.3)'">Kuro Digital</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ─────────────────────────────────────────────── */
+const cur=document.getElementById('cur');
+const ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.dish-card,.vibe-card,.event-card,.rev-card,.is-cell,.occ-chip').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* ── FIESTA PARTICLE CANVAS ─────────────────────────────── */
+const fc=document.getElementById('fiesta-canvas');
+const fctx=fc.getContext('2d');
+let FW,FH;
+function resizeFc(){FW=fc.width=window.innerWidth;FH=fc.height=window.innerHeight;}
+resizeFc();window.addEventListener('resize',resizeFc);
+
+const COLORS=[
+  [196,43,26],   // chili red
+  [232,40,122],  // hot pink
+  [212,137,26],  // tequila gold
+  [61,181,74],   // lime green
+  [13,204,200],  // cyan
+  [255,255,255], // white sparks
+];
+
+class FiestaParticle{
+  constructor(){this.reset(true);}
+  reset(init=false){
+    this.x=Math.random()*FW;
+    this.y=init?Math.random()*FH:FH+10;
+    this.vx=(Math.random()-.5)*0.8;
+    this.vy=-(Math.random()*1.0+0.4);
+    this.life=1;
+    this.decay=Math.random()*0.005+0.0018;
+    this.r=Math.random()*2.2+0.6;
+    this.color=COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.type=Math.random()>.65?'spark':'orb';
+    this.wobble=Math.random()*Math.PI*2;
+    this.wobbleSpeed=Math.random()*0.03+0.01;
+  }
+  update(){
+    this.wobble+=this.wobbleSpeed;
+    this.x+=this.vx+Math.sin(this.wobble)*0.3;
+    this.y+=this.vy;
+    this.life-=this.decay;
+    if(this.life<=0||this.y<-10)this.reset();
+  }
+  draw(){
+    const [r,g,b]=this.color;
+    const a=this.life*0.65;
+    if(this.type==='orb'){
+      const grad=fctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r*4);
+      grad.addColorStop(0,`rgba(${r},${g},${b},${a})`);
+      grad.addColorStop(0.5,`rgba(${r},${g},${b},${a*0.4})`);
+      grad.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      fctx.beginPath();fctx.arc(this.x,this.y,this.r*4,0,Math.PI*2);
+      fctx.fillStyle=grad;fctx.fill();
+      fctx.beginPath();fctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      fctx.fillStyle=`rgba(${Math.min(r+60,255)},${Math.min(g+60,255)},${Math.min(b+60,255)},${a})`;fctx.fill();
+    } else {
+      fctx.strokeStyle=`rgba(${r},${g},${b},${a*0.5})`;
+      fctx.lineWidth=0.9;
+      fctx.beginPath();
+      fctx.moveTo(this.x,this.y);
+      fctx.lineTo(this.x-this.vx*8,this.y-this.vy*8);
+      fctx.stroke();
+    }
+  }
+}
+
+const particles=[];
+for(let i=0;i<150;i++) particles.push(new FiestaParticle());
+function animParticles(){
+  fctx.clearRect(0,0,FW,FH);
+  particles.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+/* ── NAVBAR ──────────────────────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+});
+
+/* ── REVEAL ──────────────────────────────────────────────── */
+const revIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.07});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revIO.observe(el));
+
+/* ── MENU TABS ───────────────────────────────────────────── */
+function switchTab(btn,panel){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.menu-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panel).classList.add('active');
+}
+
+/* ── OCCASION CHIPS ──────────────────────────────────────── */
+function toggleOcc(chip){
+  document.querySelectorAll('.occ-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+}
+
+/* ── BOOKING ─────────────────────────────────────────────── */
+function handleBook(btn){
+  const orig=btn.innerHTML;
+  btn.innerHTML='<span>Sending reservation…</span>';
+  btn.style.background='#3d3228';
+  setTimeout(()=>{
+    btn.innerHTML='<span>✓ We\'ll WhatsApp you to confirm!</span>';
+    btn.style.background='#2a5c20';
+    setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},5000);
+  },1400);
+}
+
+/* ── MOBILE NAV ──────────────────────────────────────────── */
+function openMob(){document.getElementById('mob-nav').classList.add('open');}
+function closeMob(){document.getElementById('mob-nav').classList.remove('open');}
+
+/* ── SMOOTH SCROLL ───────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+/* ── HERO PARALLAX ───────────────────────────────────────── */
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY;
+  const orb=document.querySelector('.hero-orb');
+  if(orb&&sy<window.innerHeight){
+    orb.style.transform=`translateY(calc(-50% + ${sy*0.28}px))`;
+    orb.style.opacity=`${1-sy/(window.innerHeight*0.85)}`;
+  }
+  const hc=document.querySelector('.hero-content');
+  if(hc&&sy<window.innerHeight){
+    hc.style.transform=`translateY(${sy*0.15}px)`;
+  }
+});
+
+/* ── NEON LOADER ─────────────────────────────────────────── */
+(function(){
+  const LA_TEXT = 'La ';
+  const CANTINA_TEXT = 'Cantina';
+  const laEl = document.getElementById('ll-la');
+  const canEl = document.getElementById('ll-cantina');
+  const tagline = document.getElementById('loader-tagline');
+  const bar = document.getElementById('loader-bar');
+  const barWrap = document.getElementById('loader-bar-wrap');
+  const loader = document.getElementById('loader');
+  const lcLeft = document.getElementById('lc-left');
+  const lcRight = document.getElementById('lc-right');
+
+  function typeNeon(el, text, delay, perChar, onDone){
+    let i = 0;
+    el.style.opacity = '1';
+    function next(){
+      if(i >= text.length){ if(onDone) onDone(); return; }
+      el.textContent += text[i];
+      el.style.filter = 'brightness(2.4)';
+      setTimeout(()=>{ el.style.filter = 'brightness(1)'; }, 75);
+      i++;
+      setTimeout(next, perChar + Math.random()*55);
+    }
+    setTimeout(next, delay);
+  }
+
+  // Cactus slide in first
+  setTimeout(function(){
+    lcLeft.classList.add('show');
+    lcRight.classList.add('show');
+  }, 100);
+
+  // Then type "La "
+  typeNeon(laEl, LA_TEXT, 420, 130, function(){
+    setTimeout(function(){
+      typeNeon(canEl, CANTINA_TEXT, 0, 85, function(){
+        setTimeout(function(){
+          tagline.style.opacity = '1';
+          barWrap.style.opacity = '1';
+          setTimeout(function(){ bar.style.width = '100%'; }, 60);
+          setTimeout(function(){
+            loader.classList.add('hide');
+            setTimeout(function(){ loader.style.display='none'; }, 750);
+          }, 3000);
+        }, 200);
+      });
+    }, 160);
+  });
+})();
+</script>
+</body>
+</html>
